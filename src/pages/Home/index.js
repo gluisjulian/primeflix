@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Api from '../../api/Api';
+import {Link} from 'react-router-dom'
+import './Home.css'
 
 
 function Home(){
 
-    const [filme, setFilme] = useState([]);
+    const [filmes, setFilmes] = useState([]);
 
 
     useEffect(() => {
@@ -17,7 +19,8 @@ function Home(){
                 }
             })
 
-            console.log(response.data.results);
+            //console.log(response.data.results);
+            setFilmes(response.data.results.slice(0, 10));
         }
 
         loadFilmes();
@@ -25,8 +28,20 @@ function Home(){
 
 
     return(
-        <div>
-            <h1>Bem Vindo a HOME</h1>
+        <div className="container">
+            <div className="lista-filmes">
+                {filmes.map((filme) => {
+                    return(
+                        <article key={filme.id}>
+                            <strong>{filme.title}</strong>
+                            <img src={`https://image.tmdb.org/t/p/original/${filme.poster_path}`} alt={filme.title}/>
+                            <Link to={`/filme/${filme.id}`}>Acessar</Link>
+                        </article>
+                    )
+                })}
+
+            </div>
+            
         </div>
     )
 }
